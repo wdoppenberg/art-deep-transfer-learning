@@ -145,21 +145,21 @@ class ExperimentHandler(object):
 			ResNet_net = ResNet(self.hdf5_path, self.results_storing_path, self.n_labels, CHALLENGES[0], self.tl_mode)
 			ResNet_net.train()
 
-		def start_experiment(self):
+	def start_experiment(self):
 
-			images = self.get_images()
-			metadata = self.get_metadata()
-			
-			total_labels = self.extract_labels(metadata)
-			
-			filtered_data = self.filter_images_and_labels(images, total_labels)
-			images = filtered_data[0]
-			total_labels = filtered_data[1]
+		images = self.get_images()
+		metadata = self.get_metadata()
+		
+		total_labels = self.extract_labels(metadata)
+		
+		filtered_data = self.filter_images_and_labels(images, total_labels)
+		images = filtered_data[0]
+		total_labels = filtered_data[1]
 
-			one_hot_encodings =  self.one_hot_encoding(total_labels)
+		one_hot_encodings =  self.one_hot_encoding(total_labels)
 
-			self.make_data_splits(images, one_hot_encodings)
-			self.run_neural_architecture()
+		self.make_data_splits(images, one_hot_encodings)
+		self.run_neural_architecture()
 
 if __name__ == '__main__':
 	
