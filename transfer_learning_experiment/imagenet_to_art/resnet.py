@@ -12,7 +12,7 @@ import gc
 import numpy as np 
 
 from sklearn.preprocessing import LabelEncoder
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, roc_auc_score
 
 from keras import __version__
@@ -47,7 +47,7 @@ class ResNet(object):
 		self.loss = "categorical_crossentropy"
 		self.early_stopping = keras.callbacks.EarlyStopping(monitor='val_loss', patience=7, verbose=1, mode='auto')
 
-                self.tl_mode = tl_mode
+		self.tl_mode = tl_mode
 		self.hdf5_path = hdf5_path + "/"
 		self.nb_classes = nb_classes
 
@@ -134,18 +134,18 @@ class ResNet(object):
 			os.makedirs(self.model_path)
 
 	def setup_transfer_learning_model(self, base_model):	
-	        if self.tl_mode == "off_the_shelf":
-		    for layer in base_model.layers[:-2]:
-			layer.trainable = False
+		if self.tl_mode == "off_the_shelf":
+			for layer in base_model.layers[:-2]:
+				layer.trainable = False
 
-		        base_model.layers[-1].trainable = True
+				base_model.layers[-1].trainable = True
 
-		        base_model.compile(optimizer = "rmsprop", loss=self.loss, metrics=["accuracy"])
+				base_model.compile(optimizer = "rmsprop", loss=self.loss, metrics=["accuracy"])
 
-                elif self.tl_mode == "fine_tuning":
-                    for layer in base_model.layers:
-			layer.trainable = True
-		        base_model.compile(optimizer = self.optimizer, loss=self.loss, metrics=["accuracy"])
+		elif self.tl_mode == "fine_tuning":
+			for layer in base_model.layers:
+				layer.trainable = True
+				base_model.compile(optimizer = self.optimizer, loss=self.loss, metrics=["accuracy"])
                     
 	def add_layer(self, base_model):
 		tmp_output = base_model.output

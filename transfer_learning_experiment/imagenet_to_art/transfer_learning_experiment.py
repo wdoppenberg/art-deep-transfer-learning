@@ -3,7 +3,7 @@ import pandas as pd
 from resnet import ResNet
 
 from sklearn.preprocessing import LabelEncoder
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 
 from keras.utils import np_utils
 
@@ -25,7 +25,7 @@ class ExperimentHandler(object):
 		self.dataset_name = dataset_name
 		self.metadata_path = metadata_path
 		self.jpg_images_path = jpg_images_path
-                self.tl_mode = tl_mode
+		self.tl_mode = tl_mode
 		self.dataset_storing_path = dataset_path + dataset_name + "/" 
 		self.results_storing_path = results_path + dataset_name + "/"
 
@@ -135,9 +135,9 @@ class ExperimentHandler(object):
 					self.store_images_to_hdf5(testing_images_path, X_test, 'X_test')
 					self.store_encodings_to_hdf5(testing_labels_path, y_test, 'y_test')
 
-                    			print("The splits have been created!")
+				print("The splits have been created!")
 			else:
-                                print("The splits are already there!")
+				print("The splits are already there!")
 				self.hdf5_path = os.path.dirname(self.dataset_storing_path+challenge+"/")
 
 	def run_neural_architecture(self):
@@ -145,21 +145,21 @@ class ExperimentHandler(object):
 			ResNet_net = ResNet(self.hdf5_path, self.results_storing_path, self.n_labels, CHALLENGES[0], self.tl_mode)
 			ResNet_net.train()
 
-    	def start_experiment(self):
+		def start_experiment(self):
 
-		images = self.get_images()
-		metadata = self.get_metadata()
-		
-		total_labels = self.extract_labels(metadata)
-		
-		filtered_data = self.filter_images_and_labels(images, total_labels)
-		images = filtered_data[0]
-		total_labels = filtered_data[1]
+			images = self.get_images()
+			metadata = self.get_metadata()
+			
+			total_labels = self.extract_labels(metadata)
+			
+			filtered_data = self.filter_images_and_labels(images, total_labels)
+			images = filtered_data[0]
+			total_labels = filtered_data[1]
 
-		one_hot_encodings =  self.one_hot_encoding(total_labels)
+			one_hot_encodings =  self.one_hot_encoding(total_labels)
 
-		self.make_data_splits(images, one_hot_encodings)
-		self.run_neural_architecture()
+			self.make_data_splits(images, one_hot_encodings)
+			self.run_neural_architecture()
 
 if __name__ == '__main__':
 	
@@ -173,7 +173,7 @@ if __name__ == '__main__':
 	parser.add_argument('--jpg_images_path', type=str)
 	parser.add_argument('--results_path', type=str)
 	parser.add_argument('--datasets_path', type=str)
-        parser.add_argument('--tl_mode', type=str)
+	parser.add_argument('--tl_mode', type=str)
 
 	args = parser.parse_args()
 
@@ -183,7 +183,7 @@ if __name__ == '__main__':
 	jpg_images_path = args.jpg_images_path
 	results_path = args.results_path
 	datasets_path = args.datasets_path
-        tl_mode = args.tl_mode
+	tl_mode = args.tl_mode
 	
 	experiment = ExperimentHandler(ANN, dataset_name, metadata_path, jpg_images_path, results_path, datasets_path, tl_mode)
 	experiment.start_experiment()
