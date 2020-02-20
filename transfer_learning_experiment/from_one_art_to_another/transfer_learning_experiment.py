@@ -135,7 +135,7 @@ class ExperimentHandler(object):
 					self.store_images_to_hdf5(testing_images_path, X_test, 'X_test')
 					self.store_encodings_to_hdf5(testing_labels_path, y_test, 'y_test')
 
-					print("The splits have been created!")
+				print("The splits have been created!")
 			else:
 				print("The splits are already there!")
 				self.hdf5_path = os.path.dirname(self.dataset_storing_path+challenge+"/")
