@@ -1,6 +1,6 @@
 import glob
 import random
-import xml.etree.ElementTree as ET
+import xmltodict
 
 ART_DATASET = 'https://ndownloader.figshare.com/articles/5660617/versions/1'
 
@@ -19,6 +19,10 @@ def random_art():
     Returns XML data from randomly chosen piece of art in dataset
     """
     path = random.choice(glob.glob('datasets/xml2/*.xml'))
-    tree = ET.parse(path)
-    root = tree.getroot()
-    return root
+    d = {}
+    with open(path) as f:
+        d = xmltodict.parse(f.read())
+
+    return d
+    
+print(random_art()['record']['metadata']['oai_dc:dc']['dc:creator'])
