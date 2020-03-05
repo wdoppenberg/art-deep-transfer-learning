@@ -132,3 +132,6 @@ dmypy.json
 datasets
 
 .vscode/
+
+.DS_Store
+DS_Store
