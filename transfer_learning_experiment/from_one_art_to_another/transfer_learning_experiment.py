@@ -1,6 +1,6 @@
 import pandas as pd 
 
-from .RijksVGG19Net import RijksVGG19Net
+from RijksVGG19Net import RijksVGG19Net
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
