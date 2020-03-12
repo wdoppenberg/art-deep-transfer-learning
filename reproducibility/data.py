@@ -30,7 +30,7 @@ def random_art():
 
 def xml_files2csv():
     directory = r"..\metadata\data\rijksxml\xml2"
-    directory_excel_export = r'..\metadata\data\export_info_art_df.csv'
+    directory_excel_export = r'..\metadata\data\export_info_art_df_run3.csv'
     columns_df = ['ImageId', 'dc_creator', 'dc_materiaal', 'dc_type']
     i = 0
     for filename in os.listdir(directory):
@@ -78,10 +78,9 @@ def xml_files2csv():
             else:
                 info_art_dataframe = pd.concat([info_art_dataframe, dataframe_art])
                 i+=1
-                info_art_dataframe.to_csv (directory_excel_export, index = False, header=True)
         except UnicodeDecodeError:
             continue        
-        
+    info_art_dataframe.to_csv (directory_excel_export, index = False, header=True)
 
 
 print(xml_files2csv())

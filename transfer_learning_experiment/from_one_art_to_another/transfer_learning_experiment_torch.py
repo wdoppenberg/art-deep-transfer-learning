@@ -46,37 +46,56 @@ class ExperimentHandler(object):
 	def get_images(self):
 		images = glob.glob(self.jpg_images_path+"*.jpg")
 		images = sorted(images)
+		filenames = []
+		for image in images:
+			split = image.split('\\')[-1]
+			filenames.append(split.split('.')[0])
+		dict_im = {'ImageId': filenames, 'Images': images}
+		columns = ['ImageId', 'Images']
+		images_df = pd.DataFrame.from_dict(dict_im)
+		images_df = images_df.set_index('ImageId', drop=True)
+
 		print(f"# of images{np.size(images)}")
-	
-		return(images)
+		
+		return(images_df)
 
 	def extract_labels(self, metadata):
 		total_labels = list()
-	
+		metadata = metadata.set_index('ImageId', drop=True)
 		for challenge in CHALLENGES:
-			tmp = metadata.loc[:, challenge].tolist()
+			tmp = metadata.loc[:, challenge]
+			
 			total_labels.append(tmp)
-=
+
+		print(f"size labels: {np.size(total_labels)}")
 		return(total_labels)
 
 	def filter_images_and_labels(self, images, labels):		
 		#####  This function fails to align correct labels with images --> need all the labels and images, find a way to fix this
-		to_remove = list()
-		for idx, (image, label) in enumerate(zip(images, labels[0])):
-			if label == " anoniem" or label == " ":
-				to_remove.append(idx)		
-		images = [i for j, i in enumerate(images) if j not in to_remove]
-		labels[0] = [i for j, i in enumerate(labels[0]) if j not in to_remove]
+		i = 0
+		for label in labels:
+			if i ==0:
+				concat_df = pd.concat([images, label], axis=1)
+				i+=1
+			else:
+				concat_df = pd.concat([concat_df, label], axis=1)
+
+		concat_df = concat_df.dropna()
+		concat_df = concat_df[concat_df != 'anoniem']
+		concat_df = concat_df[concat_df != ' ']
+		images = concat_df[concat_df.columns[0]].to_list()
+		labels = [concat_df[concat_df.columns[1]].to_list()]
+	
 		print(f"new size of images: {np.size(images)}, new size of labels: {np.size(labels)}")
 		return(images, labels)
 
 	def one_hot_encoding(self, total_labels):
 		one_hot_encodings = list()
 		encoder = LabelEncoder()
-		print('now_here')
+
 		for label in total_labels:
 			self.n_labels = len(Counter(label).keys())
-			print(label)
+	
 			encoder.fit(label)
 			encoded_y = encoder.transform(label)
 
@@ -141,9 +160,9 @@ class ExperimentHandler(object):
 				self.hdf5_path = os.path.dirname(self.dataset_storing_path+challenge+"/")
 
 	def run_neural_architecture(self):
-		if experiment.neural_network == "ResNet":
-			RijksVgg = RijksVGG19Net(self.hdf5_path, self.results_storing_path, self.n_labels, CHALLENGES[0], self.tl_mode)
-			RijksVgg.train()
+		print([self.hdf5_path, self.results_storing_path, self.n_labels, CHALLENGES[0], self.tl_mode])
+		RijksVgg = RijksVGG19Net(self.hdf5_path, self.results_storing_path, self.n_labels, CHALLENGES[0])
+		RijksVgg.train()
 
 	def start_experiment(self):
 

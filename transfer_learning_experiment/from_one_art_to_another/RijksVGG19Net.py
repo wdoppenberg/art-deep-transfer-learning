@@ -26,7 +26,7 @@ from keras.callbacks import *
 from collections import Counter
 from PIL import Image
 
-Model_Path =  "../../models/creator/VGG19/creator_VGG19_model.h5"
+Model_Path =  "../../models/creator/VGG19/creator_VGG19_model.h5" #this does not exist yet <-----------------
 Weights_Path = "../../models/creator/VGG19/creator_VGG19_weights.h5"
 
 class RijksVGG19Net(object):
