@@ -31,7 +31,7 @@ class ExperimentHandler(object):
 
 		self.make_dataset_path() 
 		self.make_results_path()
-
+	
 	def make_dataset_path(self):
 		if not os.path.exists(self.dataset_storing_path):
 			os.makedirs(self.dataset_storing_path)
@@ -46,7 +46,7 @@ class ExperimentHandler(object):
 	def get_images(self):
 		images = glob.glob(self.jpg_images_path+"*.jpg")
 		images = sorted(images)
-
+		print(f"# of images{np.size(images)}")
 		return(images)
 
 	def extract_labels(self, metadata):
@@ -56,18 +56,20 @@ class ExperimentHandler(object):
 			tmp = metadata.loc[:, challenge].tolist()
 			total_labels.append(tmp)
 
+		print(f"size labels: {np.size(total_labels)}")
 		return(total_labels)
 
 	def filter_images_and_labels(self, images, labels):		
+		#####  This function fails to align correct labels with images --> need all the labels and images, find a way to fix this
 		to_remove = list()
 
 		for idx, (image, label) in enumerate(zip(images, labels[0])):
 			if label == " anoniem" or label == " ":
 				to_remove.append(idx)
-					
+		print(labels[0])			
 		images = [i for j, i in enumerate(images) if j not in to_remove]
 		labels[0] = [i for j, i in enumerate(labels[0]) if j not in to_remove]
-	
+		print(f"new size of images: {np.size(images)}, new size of labels: {np.size(labels)}")
 		return(images, labels)
 
 	def one_hot_encoding(self, total_labels):
@@ -184,6 +186,5 @@ if __name__ == '__main__':
 	results_path = args.results_path
 	datasets_path = args.datasets_path
 	tl_mode = args.tl_mode
-	
 	experiment = ExperimentHandler(ANN, dataset_name, metadata_path, jpg_images_path, results_path, datasets_path, tl_mode)
 	experiment.start_experiment()
