@@ -29,6 +29,10 @@ from PIL import Image
 Model_Path =  "../../models/creator/VGG19/creator_VGG19_model.h5"
 Weights_Path = "../../models/creator/VGG19/creator_VGG19_weights.h5"
 
+import torch
+import torchvision as tv
+
+
 class RijksVGG19Net(object):
 	def __init__(self, hdf5_path, results_path, nb_classes, challenge):
 

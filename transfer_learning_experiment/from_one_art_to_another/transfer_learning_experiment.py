@@ -1,6 +1,6 @@
 import pandas as pd 
 
-from RijksVGG19Net import RijksVGG19Net
+from .RijksVGG19Net import RijksVGG19Net
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
@@ -31,7 +31,7 @@ class ExperimentHandler(object):
 
 		self.make_dataset_path() 
 		self.make_results_path()
-	
+
 	def make_dataset_path(self):
 		if not os.path.exists(self.dataset_storing_path):
 			os.makedirs(self.dataset_storing_path)
@@ -46,37 +46,37 @@ class ExperimentHandler(object):
 	def get_images(self):
 		images = glob.glob(self.jpg_images_path+"*.jpg")
 		images = sorted(images)
-		print(f"# of images{np.size(images)}")
-	
+
 		return(images)
 
 	def extract_labels(self, metadata):
 		total_labels = list()
-	
+
 		for challenge in CHALLENGES:
 			tmp = metadata.loc[:, challenge].tolist()
 			total_labels.append(tmp)
-=
+
 		return(total_labels)
 
 	def filter_images_and_labels(self, images, labels):		
-		#####  This function fails to align correct labels with images --> need all the labels and images, find a way to fix this
 		to_remove = list()
+
 		for idx, (image, label) in enumerate(zip(images, labels[0])):
 			if label == " anoniem" or label == " ":
-				to_remove.append(idx)		
+				to_remove.append(idx)
+					
 		images = [i for j, i in enumerate(images) if j not in to_remove]
 		labels[0] = [i for j, i in enumerate(labels[0]) if j not in to_remove]
-		print(f"new size of images: {np.size(images)}, new size of labels: {np.size(labels)}")
+	
 		return(images, labels)
 
 	def one_hot_encoding(self, total_labels):
 		one_hot_encodings = list()
 		encoder = LabelEncoder()
-		print('now_here')
+
 		for label in total_labels:
 			self.n_labels = len(Counter(label).keys())
-			print(label)
+
 			encoder.fit(label)
 			encoded_y = encoder.transform(label)
 
@@ -135,13 +135,13 @@ class ExperimentHandler(object):
 					self.store_images_to_hdf5(testing_images_path, X_test, 'X_test')
 					self.store_encodings_to_hdf5(testing_labels_path, y_test, 'y_test')
 
-				print("The splits have been created!")
+					print("The splits have been created!")
 			else:
 				print("The splits are already there!")
 				self.hdf5_path = os.path.dirname(self.dataset_storing_path+challenge+"/")
 
 	def run_neural_architecture(self):
-		if experiment.neural_network == "ResNet":
+		if self.neural_network == "ResNet":
 			RijksVgg = RijksVGG19Net(self.hdf5_path, self.results_storing_path, self.n_labels, CHALLENGES[0], self.tl_mode)
 			RijksVgg.train()
 
