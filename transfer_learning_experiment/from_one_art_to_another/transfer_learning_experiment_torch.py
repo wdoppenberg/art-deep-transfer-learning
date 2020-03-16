@@ -57,7 +57,7 @@ class ExperimentHandler(object):
 		df = pd.merge(images, labels, on='ImageId')
 
 		df.dropna(inplace=True)
-		df = df[df['dc_creator'] != 'anoniem']
+		df = df[~df['dc_creator'].str.contains('anoniem')]
 		df = df[df['dc_creator'] != ' ']
 
 		return df['path'].to_list(), df[CHALLENGE].to_list()
@@ -86,10 +86,8 @@ class ExperimentHandler(object):
 		for i in range(0, len(images)):
 
 			filename = images[i]
-			fin = open(filename, 'rb')
-			binary_data = fin.read()
-
-			dset[i] = np.fromstring(binary_data, dtype='uint8')
+			with open(filename, 'rb') as fin:
+				dset[i] = np.fromstring(fin.read(), dtype='uint8')
 
 	def store_encodings_to_hdf5(self, path, encodings, split):
 		f = h5py.File(path)

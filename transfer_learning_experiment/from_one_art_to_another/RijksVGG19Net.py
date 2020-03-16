@@ -26,8 +26,8 @@ from keras.callbacks import *
 from collections import Counter
 from PIL import Image
 
-Model_Path =  "../../models/creator/VGG19/creator_VGG19_model.h5" #this does not exist yet <-----------------
-Weights_Path = "../../models/creator/VGG19/creator_VGG19_weights.h5"
+Model_Path =  "models/creator/VGG19/creator_VGG19_model.h5" # Awaiting response https://github.com/paintception/Deep-Transfer-Learning-for-Art-Classification-Problems/issues/4
+Weights_Path = "models/creator/VGG19/creator_VGG19_weights.h5"
 
 class RijksVGG19Net(object):
 	def __init__(self, hdf5_path, results_path, nb_classes, challenge):
@@ -184,5 +184,3 @@ class RijksVGG19Net(object):
 
 		#model.save(self.model_path+"TL_VGG19_model.h5")
 		#model.save_weights(self.model_path + "TL_VGG19_weights.h5")
-
-
