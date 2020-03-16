@@ -17,7 +17,8 @@ import csv
 import time
 import h5py
 
-CHALLENGES = ["dc_type"]
+CHALLENGE = 'dc_creator'
+CHALLENGES = ['dc_creator']
 
 class ExperimentHandler(object):
 	def __init__(self, neural_network, dataset_name, metadata_path, jpg_images_path, results_path, dataset_path, tl_mode):
@@ -29,7 +30,7 @@ class ExperimentHandler(object):
 		self.dataset_storing_path = dataset_path + dataset_name + "/" 
 		self.results_storing_path = results_path + dataset_name + "/"
 
-		self.make_dataset_path() 
+		self.make_dataset_path()
 		self.make_results_path()
 	
 	def make_dataset_path(self):
@@ -48,60 +49,37 @@ class ExperimentHandler(object):
 		images = sorted(images)
 		filenames = []
 		for image in images:
-			split = image.split('\\')[-1]
+			split = image.split(r'/')[-1]
 			filenames.append(split.split('.')[0])
-		dict_im = {'ImageId': filenames, 'Images': images}
-		columns = ['ImageId', 'Images']
-		images_df = pd.DataFrame.from_dict(dict_im)
-		images_df = images_df.set_index('ImageId', drop=True)
+		dict_im = {'ImageId': filenames, 'path': images}
+		images_df = pd.DataFrame(dict_im)
 
 		print(f"# of images{np.size(images)}")
 		
 		return(images_df)
 
-	def extract_labels(self, metadata):
-		total_labels = list()
-		metadata = metadata.set_index('ImageId', drop=True)
-		for challenge in CHALLENGES:
-			tmp = metadata.loc[:, challenge]
-			
-			total_labels.append(tmp)
+	def filter_images_and_labels(self, images, labels):
+		df = pd.merge(images, labels, on='ImageId')
 
-		print(f"size labels: {np.size(total_labels)}")
-		return(total_labels)
+		df.dropna(inplace=True)
+		df = df[df['dc_creator'] != 'anoniem']
+		df = df[df['dc_creator'] != ' ']
 
-	def filter_images_and_labels(self, images, labels):		
-		#####  This function fails to align correct labels with images --> need all the labels and images, find a way to fix this
-		i = 0
-		for label in labels:
-			if i ==0:
-				concat_df = pd.concat([images, label], axis=1)
-				i+=1
-			else:
-				concat_df = pd.concat([concat_df, label], axis=1)
+		return df['path'].to_list(), df[CHALLENGE].to_list()
 
-		concat_df = concat_df.dropna()
-		concat_df = concat_df[concat_df != 'anoniem']
-		concat_df = concat_df[concat_df != ' ']
-		images = concat_df[concat_df.columns[0]].to_list()
-		labels = [concat_df[concat_df.columns[1]].to_list()]
-	
-		print(f"new size of images: {np.size(images)}, new size of labels: {np.size(labels)}")
-		return(images, labels)
-
-	def one_hot_encoding(self, total_labels):
+	def one_hot_encoding(self, labels):
 		one_hot_encodings = list()
 		encoder = LabelEncoder()
 
-		for label in total_labels:
-			self.n_labels = len(Counter(label).keys())
-	
-			encoder.fit(label)
-			encoded_y = encoder.transform(label)
+		labels
+		self.n_labels = len(Counter(labels).keys())
 
-			final_y = np_utils.to_categorical(encoded_y, self.n_labels)
+		encoder.fit(labels)
+		encoded_y = encoder.transform(labels)
 
-			one_hot_encodings.append(final_y)
+		final_y = np_utils.to_categorical(encoded_y, self.n_labels)
+
+		one_hot_encodings.append(final_y)
 
 		return(one_hot_encodings)
 
@@ -167,15 +145,11 @@ class ExperimentHandler(object):
 	def start_experiment(self):
 
 		images = self.get_images()
-		metadata = self.get_metadata()
+		labels = self.get_metadata()
 		
-		total_labels = self.extract_labels(metadata)
-		
-		filtered_data = self.filter_images_and_labels(images, total_labels)
-		images = filtered_data[0]
-		total_labels = filtered_data[1]
+		images, total_labels = self.filter_images_and_labels(images, labels)
 
-		one_hot_encodings =  self.one_hot_encoding(total_labels)
+		one_hot_encodings = self.one_hot_encoding(total_labels)
 
 		self.make_data_splits(images, one_hot_encodings)
 		self.run_neural_architecture()
