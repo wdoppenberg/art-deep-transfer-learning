@@ -6,8 +6,6 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 
 from keras.utils import np_utils
-
-from collections import Counter
  
 import numpy as np 
 
@@ -65,9 +63,7 @@ class ExperimentHandler(object):
 	def one_hot_encoding(self, labels):
 		one_hot_encodings = list()
 		encoder = LabelEncoder()
-
-		labels
-		self.n_labels = len(Counter(labels).keys())
+		self.n_labels = len(set(labels))
 
 		encoder.fit(labels)
 		encoded_y = encoder.transform(labels)
@@ -76,7 +72,7 @@ class ExperimentHandler(object):
 
 		one_hot_encodings.append(final_y)
 
-		return(one_hot_encodings)
+		return one_hot_encodings
 
 	def store_images_to_hdf5(self, path, images, split):
 		f = h5py.File(path)
@@ -91,7 +87,7 @@ class ExperimentHandler(object):
 
 	def store_encodings_to_hdf5(self, path, encodings, split):
 		f = h5py.File(path)
-		dset = f.create_dataset(split, data=encodings)	
+		dset = f.create_dataset(split, data=encodings)
 
 	def make_data_splits(self, images, one_hot_encodings):
 		for challenge in CHALLENGES:

@@ -140,3 +140,7 @@ data/*
 DS_Store
 
 ...*
+
+models/creator/VGG19/creator_VGG19_model.h5
+models/creator/V3/creator_V3_model.h5
+models/creator/ResNet/creator_ResNet_model.h5
