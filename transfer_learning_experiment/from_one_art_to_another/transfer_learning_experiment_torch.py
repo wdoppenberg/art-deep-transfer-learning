@@ -45,18 +45,13 @@ class ExperimentHandler(object):
 		return(pd.read_csv(self.metadata_path))
 		
 	def get_images(self):
-		images = glob.glob(self.jpg_images_path+"*.jpg")
-		images = sorted(images)
-		filenames = []
-		for image in images:
-			split = image.split(r'/')[-1]
-			filenames.append(split.split('.')[0])
-		dict_im = {'ImageId': filenames, 'path': images}
-		images_df = pd.DataFrame(dict_im)
+		paths = sorted(glob.glob(self.jpg_images_path+"*.jpg"))
+		filenames = sorted(os.listdir(self.jpg_images_path))
 
-		print(f"# of images{np.size(images)}")
-		
-		return(images_df)
+		images_df = pd.DataFrame({'ImageId':filenames, 'path': paths})
+		images_df['ImageId'] = images_df['ImageId'].str.replace('.jpg','')
+
+		return images_df
 
 	def filter_images_and_labels(self, images, labels):
 		df = pd.merge(images, labels, on='ImageId')
