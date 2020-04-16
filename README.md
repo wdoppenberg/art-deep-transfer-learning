@@ -21,3 +21,9 @@ Universiteit Antwerpen, Belgium
 [Original study's repository](https://github.com/paintception/Deep-Transfer-Learning-for-Art-Classification-Problems)
 
 [Original paper](https://www.researchgate.net/publication/327498843_Deep_Transfer_Learning_for_Art_Classification_Problems)
+
+---
+
+[DOWNLOAD DATASET](https://drive.google.com/open?id=1-nOa-93oohjw2mm6taBb1Y4TpXIDgSID)
+
+Otherwise, create your own splits using [this](https://figshare.com/articles/Rijksmuseum_Challenge_2014/5660617) link; download `rijksimg.tar` and putting the images in a folder called `images`. After this clone the [GitHub repository](https://github.com/wdoppenberg/cs4240-project), install the dependencies and run `create_splits.py`.
