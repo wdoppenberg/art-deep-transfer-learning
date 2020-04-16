@@ -9,6 +9,8 @@ metadata_path = 'metadata_rijks.csv'
 datasets_path = 'datasets/'
 images_path = 'images/'
 
+os.mkdir(datasets_path)
+
 metadata = pd.read_csv(metadata_path, sep='|')
 
 # Filter data
