@@ -26,4 +26,4 @@ Universiteit Antwerpen, Belgium
 
 [DOWNLOAD DATASET](https://drive.google.com/open?id=1-nOa-93oohjw2mm6taBb1Y4TpXIDgSID)
 
-Otherwise, create your own splits using [this](https://figshare.com/articles/Rijksmuseum_Challenge_2014/5660617) link; download `rijksimg.tar` and putting the images in a folder called `images`. After this clone the [GitHub repository](https://github.com/wdoppenberg/cs4240-project), install the dependencies and run `create_splits.py`.
+Otherwise, create your own splits using [this](https://figshare.com/articles/Rijksmuseum_Challenge_2014/5660617) link; download `rijksimg.tar` and putting the images in a folder called `images`. After this clone this repository, install the dependencies and run `create_splits.py`.
