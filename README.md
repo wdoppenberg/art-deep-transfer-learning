@@ -1,4 +1,4 @@
-# Deep Transfer Learning for Art Classification Problems - A Reproduction Study
+# Deep Transfer Learning for Art Classification Problems - A Reproducibility Study
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/wdoppenberg/cs4240-project/blob/master/ArtClassification.ipynb)
 
