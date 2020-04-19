@@ -1,6 +1,6 @@
 # Deep Transfer Learning for Art Classification Problems - A Reproducibility Study
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/wdoppenberg/cs4240-project/blob/master/ArtClassification.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/wdoppenberg/art-deep-transfer-learning/blob/master/ArtClassification.ipynb)
 
 By [Jasper Veen](https://www.linkedin.com/in/jasper-veen), [Bruno Martens](https://www.linkedin.com/in/brunomartens), [Max Hermans](https://www.linkedin.com/in/max-hermans-8324b0b1), and [Wouter Doppenberg](https://www.linkedin.com/in/wouterdoppenberg)
 
